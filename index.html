@@ -65,7 +65,7 @@
 
         canvas {
             display: block;
-            background: #1a1a2e;
+            background: #e8f5e9;
             border-radius: 8px;
             margin-bottom: 20px;
         }
@@ -265,11 +265,11 @@
 
         function draw() {
             // Clear canvas
-            ctx.fillStyle = '#1a1a2e';
+            ctx.fillStyle = '#e8f5e9';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw grid
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.strokeStyle = 'rgba(156, 204, 101, 0.3)';
             ctx.lineWidth = 0.5;
             for (let i = 0; i <= tileCount; i++) {
                 ctx.beginPath();
@@ -309,7 +309,7 @@
             if (snake.length > 0) {
                 const head = snake[0];
                 const eyeSize = 2;
-                const eyeOffsetFromCenter = 2.5;
+                const eyeOffsetFromCenter = 6;
                 const headCenterX = head.x * gridSize + gridSize / 2;
                 const headCenterY = head.y * gridSize + gridSize / 2;
 
