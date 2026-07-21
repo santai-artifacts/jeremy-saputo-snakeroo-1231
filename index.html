@@ -398,7 +398,6 @@
             const isDarkMode = document.documentElement.classList.contains('dark-mode');
             const bgColor = isDarkMode ? '#1a2a3f' : '#e8f5e9';
             const gridColor = isDarkMode ? 'rgba(150, 180, 220, 0.5)' : 'rgba(156, 204, 101, 0.3)';
-            const eyeColor = isDarkMode ? '#fff' : '#000';
 
             // Clear canvas
             ctx.fillStyle = bgColor;
@@ -449,7 +448,7 @@
                 const headCenterX = head.x * gridSize + gridSize / 2;
                 const headCenterY = head.y * gridSize + gridSize / 2;
 
-                ctx.fillStyle = eyeColor;
+                ctx.fillStyle = '#333';
                 // Left eye
                 ctx.beginPath();
                 ctx.arc(
