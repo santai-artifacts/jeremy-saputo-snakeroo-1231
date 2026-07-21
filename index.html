@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Worm Game</title>
     <style>
+        :root {
+            --bg-gradient-start: #b3e5fc;
+            --bg-gradient-end: #81d4fa;
+            --bg-primary: white;
+            --bg-secondary: #e8f5e9;
+            --text-primary: #01579b;
+            --text-secondary: #333;
+            --text-muted: rgba(0, 0, 0, 0.6);
+            --border-color: transparent;
+            --button-secondary-bg: #f0f0f0;
+            --button-secondary-color: #333;
+            --button-secondary-hover: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --grid-color: rgba(156, 204, 101, 0.3);
+        }
+
+        html.dark-mode {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --bg-primary: #0f3460;
+            --bg-secondary: #1a2a3f;
+            --text-primary: #e0e0e0;
+            --text-secondary: #c0c0c0;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --border-color: #333;
+            --button-secondary-bg: #1a2a3f;
+            --button-secondary-color: #e0e0e0;
+            --button-secondary-hover: #2a3a4f;
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --grid-color: rgba(100, 150, 180, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,12 +45,41 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #b3e5fc 0%, #81d4fa 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            transition: background 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
 
         .container {
@@ -26,7 +87,7 @@
         }
 
         h1 {
-            color: #01579b;
+            color: var(--text-primary);
             margin-bottom: 20px;
             font-size: 2.5rem;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -37,7 +98,7 @@
             gap: 30px;
             justify-content: center;
             margin-bottom: 20px;
-            color: #01579b;
+            color: var(--text-primary);
         }
 
         .stat {
@@ -56,22 +117,25 @@
         }
 
         .game-wrapper {
-            background: white;
+            background: var(--bg-primary);
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px var(--shadow-color);
             padding: 20px;
             display: inline-block;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         canvas {
             display: block;
-            background: #e8f5e9;
+            background: var(--bg-secondary);
             border-radius: 8px;
             margin-bottom: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .controls {
-            color: #333;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 15px;
@@ -113,12 +177,13 @@
         }
 
         .btn-restart {
-            background: #f0f0f0;
-            color: #333;
+            background: var(--button-secondary-bg);
+            color: var(--button-secondary-color);
+            border: 1px solid var(--border-color);
         }
 
         .btn-restart:hover {
-            background: #e0e0e0;
+            background: var(--button-secondary-hover);
         }
 
         .game-over {
@@ -126,14 +191,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--bg-primary);
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 60px var(--shadow-color);
             z-index: 1000;
             text-align: center;
             min-width: 300px;
             display: none;
+            border: 1px solid var(--border-color);
         }
 
         .game-over.show {
@@ -153,20 +219,20 @@
         }
 
         .game-over h2 {
-            color: #0288d1;
+            color: var(--text-primary);
             margin-bottom: 15px;
             font-size: 2rem;
         }
 
         .game-over p {
             font-size: 1.2rem;
-            color: #333;
+            color: var(--text-secondary);
             margin-bottom: 20px;
         }
 
         .game-over-score {
             font-size: 1.5rem;
-            color: #01579b;
+            color: var(--text-primary);
             font-weight: bold;
             margin-bottom: 20px;
         }
@@ -184,10 +250,28 @@
                 width: 100%;
                 height: auto;
             }
+
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .theme-toggle,
+            button,
+            .game-wrapper {
+                transition: none;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">☀️</button>
+
     <div class="container">
         <h1>🪱 Worm</h1>
 
@@ -224,6 +308,53 @@
         <div class="game-over-score">Score: <span id="finalScore">0</span></div>
         <button class="btn-start" onclick="startGame()">Play Again</button>
     </div>
+
+    <script>
+        // Dark mode initialization
+        (function() {
+            const html = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            const STORAGE_KEY = 'theme-preference';
+
+            // Detect user preference on first visit
+            function getPreferredTheme() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) return stored;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            function setTheme(theme) {
+                if (theme === 'dark') {
+                    html.classList.add('dark-mode');
+                    themeToggle.textContent = '🌙';
+                    themeToggle.setAttribute('aria-label', 'Switch to light mode');
+                } else {
+                    html.classList.remove('dark-mode');
+                    themeToggle.textContent = '☀️';
+                    themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+                }
+                localStorage.setItem(STORAGE_KEY, theme);
+            }
+
+            // Initialize theme immediately to prevent flash
+            const initialTheme = getPreferredTheme();
+            setTheme(initialTheme);
+
+            // Toggle on button click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = localStorage.getItem(STORAGE_KEY) || 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+
+            // Listen for system preference changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!localStorage.getItem(STORAGE_KEY)) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
+    </script>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -264,12 +395,17 @@
         }
 
         function draw() {
+            const isDarkMode = document.documentElement.classList.contains('dark-mode');
+            const bgColor = isDarkMode ? '#1a2a3f' : '#e8f5e9';
+            const gridColor = isDarkMode ? 'rgba(100, 150, 180, 0.2)' : 'rgba(156, 204, 101, 0.3)';
+            const eyeColor = isDarkMode ? '#fff' : '#000';
+
             // Clear canvas
-            ctx.fillStyle = '#e8f5e9';
+            ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw grid
-            ctx.strokeStyle = 'rgba(156, 204, 101, 0.3)';
+            ctx.strokeStyle = gridColor;
             ctx.lineWidth = 0.5;
             for (let i = 0; i <= tileCount; i++) {
                 ctx.beginPath();
@@ -313,7 +449,7 @@
                 const headCenterX = head.x * gridSize + gridSize / 2;
                 const headCenterY = head.y * gridSize + gridSize / 2;
 
-                ctx.fillStyle = '#000';
+                ctx.fillStyle = eyeColor;
                 // Left eye
                 ctx.beginPath();
                 ctx.arc(
